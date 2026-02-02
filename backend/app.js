@@ -31,9 +31,13 @@ app.use((error, req, res, next) => {
 });
 
 /* MongoDB (NO app.listen) */
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error("❌ Mongo error:", err));
+mongoose.set("bufferCommands", false);
 
-export default app;
+mongoose
+  .connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 5000,
+  })
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => {
+    console.error("❌ Mongo error:", err.message);
+  });
