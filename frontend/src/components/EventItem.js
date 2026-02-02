@@ -16,7 +16,7 @@ function EventItem({ event }) {
 
   return (
     <article className={classes.event}>
-      <img src={`https://events-management-xi.vercel.app${event.image}`} alt={event.title} />
+      <img src={`https://events-management-xi.vercel.app/${event.image}`} alt={event.title} />
       <h1>{event.title}</h1>
       <time>{event.date}</time>
       <p>{event.description}</p>

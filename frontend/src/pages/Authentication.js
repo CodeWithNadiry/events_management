@@ -24,7 +24,7 @@ export async function action({ request }) {
     password: data.get("password"),
   };
 
-  const response = await fetch(`https://events-management-xi.vercel.app/auth/${mode}`, {
+  const response = await fetch(`https://events-management-xi.vercel.app//auth/${mode}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
