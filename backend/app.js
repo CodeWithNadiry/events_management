@@ -1,70 +1,57 @@
 import express from "express";
 import path from "path";
-import multer from "multer";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import eventsRoutes from "./routes/events.js";
-import authRoutes from './routes/auth.js'
+import authRoutes from "./routes/auth.js";
+
 dotenv.config();
 
 const app = express();
-const __dirname = path.resolve(); // Required in ES Modules to get current folder
+const __dirname = path.resolve();
 
 const MONGO_URI = process.env.MONGO_URI;
 
-// Multer storage setup
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "public", "images"));
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-// File filter
-const allowedTypes = [
-  "image/jpg",
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/avif",
-];
-const fileFilter = (req, file, cb) => {
-  cb(null, allowedTypes.includes(file.mimetype));
-};
-
-// Middlewares
-app.use(express.json());
-app.use(multer({ storage: fileStorage, fileFilter }).single("image"));
-app.use("/images", express.static(path.join(__dirname, "public", "images")));
+/* ======================
+   CORS (MUST BE FIRST)
+====================== */
 app.use(
   cors({
-    origin: [
-      "https://events-management-bqc7.vercel.app", // frontend
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
+    origin: "https://events-management-bqc7.vercel.app",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// Handle preflight
 app.options("*", cors());
 
-// Routes
-app.use("/events", eventsRoutes);
-app.use('/auth', authRoutes)
+/* ======================
+   BASIC MIDDLEWARE
+====================== */
+app.use(express.json());
+app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
-// Error handling
+/* ======================
+   ROUTES
+====================== */
+app.use("/events", eventsRoutes);
+app.use("/auth", authRoutes);
+
+/* ======================
+   ERROR HANDLER
+====================== */
 app.use((error, req, res, next) => {
-  const {
-    statusCode: status = 500,
-    message = "Something went wrong",
-    data = null,
-  } = error;
+  const status = error.statusCode || 500;
+  const message = error.message || "Something went wrong";
+  const data = error.data || null;
   res.status(status).json({ message, data });
 });
 
-// MongoDB connection
+/* ======================
+   DATABASE
+====================== */
 mongoose
   .connect(MONGO_URI)
   .then(() => {
