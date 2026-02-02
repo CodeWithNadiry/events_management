@@ -20,8 +20,8 @@ app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
 /* routes */
-app.use("/api/events", eventsRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/events", eventsRoutes);
+app.use("/auth", authRoutes);
 
 /* error handler */
 app.use((error, req, res, next) => {
