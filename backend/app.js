@@ -39,11 +39,7 @@ const fileFilter = (req, file, cb) => {
 app.use(express.json());
 app.use(multer({ storage: fileStorage, fileFilter }).single("image"));
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
-app.use(cors({
-  origin: 'https://events-management-bqc7.vercel.app', // your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true, // if you use cookies/auth headers
-}));
+app.use(cors())
 // Routes
 app.use("/events", eventsRoutes);
 app.use('/auth', authRoutes)
