@@ -12,7 +12,7 @@ function EventsList({ events }) {
             <li key={event._id} className={classes.item}>
               <Link to={`/events/${event._id}`}>
                 <img
-                  src={event.image}   // ✅ use Cloudinary URL directly
+                  src={'https://res.cloudinary.com/djvjx5sxa/image/upload/v1770030037/events/yumqewykbswqxaovi2ca.jpg'}   // ✅ use Cloudinary URL directly
                   alt={event.title}
                 />
 
