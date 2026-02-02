@@ -1,4 +1,4 @@
-import jwt, { decode } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export default function (req, res, next) {
   const authHeader = req.get("Authorization");
@@ -25,7 +25,7 @@ export default function (req, res, next) {
     throw error;
   }
 
-  req.userId = decode.userId;
+  req.userId = decodedToken.userId;
 
   next();
 }
