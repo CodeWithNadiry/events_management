@@ -1,12 +1,11 @@
 import { Suspense } from 'react';
-import { useLoaderData, Await } from 'react-router-dom';
+import { useLoaderData, Await, defer } from 'react-router-dom';
 
 import EventsList from '../components/EventsList';
 
 function EventsPage() {
   const { events } = useLoaderData();
 
-  console.log(events);
   return (
     <Suspense fallback={<p style={{ textAlign: 'center' }}>Loading...</p>}>
       <Await resolve={events}>
@@ -19,20 +18,23 @@ function EventsPage() {
 export default EventsPage;
 
 async function loadEvents() {
-  const response = await fetch('https://events-management-xi.vercel.app/events');
+  const response = await fetch(
+    'https://events-management-xi.vercel.app/events'
+  );
 
   if (!response.ok) {
-    throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
-      status: 500,
-    });
-  } else {
-    const resData = await response.json();
-    return resData.events;
+    throw new Response(
+      JSON.stringify({ message: 'Could not fetch events.' }),
+      { status: 500 }
+    );
   }
+
+  const resData = await response.json();
+  return resData.events;
 }
 
 export function loader() {
-  return {
+  return defer({
     events: loadEvents(),
-  }
+  });
 }
