@@ -13,7 +13,27 @@ const app = express();
 const __dirname = path.resolve();
 
 /* CORS */
-app.use(cors({ origin: "*" }));
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://events-management-frontend-l61hx5k41-codewithnadirys-projects.vercel.app"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PATCH,DELETE,OPTIONS"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type,Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
 
 /* middleware */
 app.use(express.json());
