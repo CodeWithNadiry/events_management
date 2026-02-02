@@ -1,8 +1,9 @@
 import express from "express";
-import path from "path";
 import mongoose from "mongoose";
 import cors from "cors";
+import path from "path";
 import dotenv from "dotenv";
+
 import eventsRoutes from "./routes/events.js";
 import authRoutes from "./routes/auth.js";
 
@@ -11,48 +12,34 @@ dotenv.config();
 const app = express();
 const __dirname = path.resolve();
 
-const MONGO_URI = process.env.MONGO_URI;
-
-/* ======================
-   CORS (MUST BE FIRST)
-====================== */
+/* CORS */
 app.use(
   cors({
     origin: "https://events-management-bqc7.vercel.app",
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Handle preflight
-app.options("*", cors());
-
-/* ======================
-   BASIC MIDDLEWARE
-====================== */
+/* middleware */
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
-/* ======================
-   ROUTES
-====================== */
-app.use("/events", eventsRoutes);
-app.use("/auth", authRoutes);
+/* routes */
+app.use("/api/events", eventsRoutes);
+app.use("/api/auth", authRoutes);
 
-/* ======================
-   ERROR HANDLER
-====================== */
+/* error handler */
 app.use((error, req, res, next) => {
-  const status = error.statusCode || 500;
-  const message = error.message || "Something went wrong";
-  const data = error.data || null;
-  res.status(status).json({ message, data });
+  res.status(error.statusCode || 500).json({
+    message: error.message || "Server error",
+  });
 });
 
-/* ======================
-   DATABASE
-====================== */
-console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error(err));
+/* MongoDB (NO app.listen) */
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.error("❌ Mongo error:", err));
+
+export default app;
