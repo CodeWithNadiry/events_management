@@ -36,7 +36,6 @@ const fileFilter = (req, file, cb) => {
 };
 
 // Middlewares
-app.options("*", cors());
 app.use(express.json());
 app.use(multer({ storage: fileStorage, fileFilter }).single("image"));
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
@@ -49,6 +48,8 @@ app.use(
     credentials: true,
   })
 );
+app.options("*", cors());
+
 // Routes
 app.use("/events", eventsRoutes);
 app.use('/auth', authRoutes)
