@@ -13,13 +13,7 @@ const app = express();
 const __dirname = path.resolve();
 
 /* CORS */
-app.use(
-  cors({
-    origin: "https://events-management-bqc7.vercel.app",
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors({ origin: "*" }));
 
 /* middleware */
 app.use(express.json());
