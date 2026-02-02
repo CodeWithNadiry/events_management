@@ -13,7 +13,7 @@ function EventsList({events}) {
         {events && events.length > 0 ? events.map((event) => (
           <li key={event._id} className={classes.item}>
             <Link to={`/events/${event._id}`}>
-              <img src={`http://localhost:8080${event.image}`} alt={event.title} />
+              <img src={`https://events-management-xi.vercel.app${event.image}`} alt={event.title} />
               <div className={classes.content}>
                 <h2>{event.title}</h2>
                 <time>{event.date}</time>

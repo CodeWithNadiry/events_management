@@ -18,7 +18,7 @@ function EventsPage() {
 export default EventsPage;
 
 async function loadEvents() {
-  const response = await fetch('http://localhost:8080/events');
+  const response = await fetch('https://events-management-xi.vercel.app/events');
 
   if (!response.ok) {
     throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {

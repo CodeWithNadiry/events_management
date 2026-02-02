@@ -67,9 +67,9 @@ export async function action({ request, params }) {
   const method = request.method;
   const formData = await request.formData(); // FormData object
 
-  let url = "http://localhost:8080/events";
+  let url = "https://events-management-xi.vercel.app/events";
   if (method === "PATCH") {
-    url = `http://localhost:8080/events/${params.eventId}`;
+    url = `https://events-management-xi.vercel.app/events/${params.eventId}`;
   }
 
   const token = getAuthToken();

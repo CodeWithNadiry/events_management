@@ -27,7 +27,7 @@ function EventDetailPage() {
 export default EventDetailPage;
 
 async function loadEvent(id) {
-  const response = await fetch("http://localhost:8080/events/" + id);
+  const response = await fetch("https://events-management-xi.vercel.app/events/" + id);
 
   if (!response.ok) {
     throw new Response(
@@ -45,7 +45,7 @@ async function loadEvent(id) {
 }
 
 async function loadEvents() {
-  const response = await fetch("http://localhost:8080/events");
+  const response = await fetch("https://events-management-xi.vercel.app/events");
 
   if (!response.ok) {
     throw new Response(
@@ -76,7 +76,7 @@ export async function action({ params, request }) {
   const eventId = params.eventId;
 
   const token = getAuthToken();
-  const response = await fetch("http://localhost:8080/events/" + eventId, {
+  const response = await fetch("https://events-management-xi.vercel.app/events/" + eventId, {
     method: request.method,
     headers: {
       Authorization: "Bearer " + token,
